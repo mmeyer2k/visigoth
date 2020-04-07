@@ -1,0 +1,17 @@
+#
+#
+#
+
+block:
+  - example.com
+  - tld
+
+allow:
+  - sub.example.com
+
+hosts:
+  - 127.0.0.1 l0calh0st localhost local.host
+  - 10.10.44.1 example.info
+
+raw:
+  - address=/custom.com/1.2.3.4

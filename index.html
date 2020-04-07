@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <link rel="shortcut icon" href="/favicon.ico">
+        <script src="/jquery.js"></script>
+        <style>
+            body {
+                font-family: monospace;
+                min-width: 600px;
+            }
+            div.modechange form {
+                float: left;
+            }
+            a {
+                text-decoration: none;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $('input[name="domain"]').change(function () {
+                    $(this).val($(this).val().toLowerCase())
+                    $(this).attr('pattern', '^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}$')
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <a href="/">
+            <button>refresh</button>
+        </a>
+        <a href="/dynamic.yaml">
+            <button>dynamic rules</button>
+        </a>
+        <a href="https://github.com/mmeyer2k/visigoth" target="_blank">
+            <button>github</button>
+        </a>
+        <hr>
+        <div class="modechange">
+            <form method="post" action="/mode/off">
+                reload rule set mode:
+                <button>off</button>
+            </form>
+            <form method="post" action="/mode/loose">
+                <button>loose</button>
+            </form>
+            <form method="post" action="/mode/tight">
+                <button>tight</button>
+            </form>
+            <form method="post" action="/mode/paranoid">
+                <button>paranoid</button>
+            </form>
+        </div>
+        <div style="clear: left">
+            last rule build time:
+            {% if stamp %}
+                {{ stamp }}
+            {% else %}
+                building...
+            {% endif %}
+        </div>
+        <div>
+            last rule build mode: {{ mode }}
+        </div>
+        <form action="/list/allow/add" method="post">
+            add domain to <span style="text-decoration: underline;">allow</span> list:
+            <input name="domain" placeholder="example.com" required>
+            <button>add</button>
+        </form>
+        <form action="/list/block/add" method="post">
+            add domain to <span style="text-decoration: underline;">block</span> list:
+            <input name="domain" placeholder="example.com" required>
+            <button>add</button>
+        </form>
+        <form action="/list/hosts/add" method="post">
+            add domain to <span style="text-decoration: underline;">hosts</span> list:
+            <input name="ip" placeholder="11.22.33.44" required>
+            <input name="domain" placeholder="example.com" required>
+            <button>add</button>
+        </form>
+        {% if allow %}
+            <fieldset>
+                <legend>allow</legend>
+                {% for domain in allow %}
+                    <form action="/list/allow/remove/{{ domain }}" method="post">
+                        <button>x</button>
+                        {{ domain }}
+                    </form>
+                {% endfor %}
+            </fieldset>
+        {% endif %}
+        {% if block %}
+            <fieldset>
+                <legend>block</legend>
+                {% for domain in block %}
+                    <form action="/list/block/remove/{{ domain }}" method="post">
+                        <button>x</button>
+                        {{ domain }}
+                    </form>
+                {% endfor %}
+            </fieldset>
+        {% endif %}
+        {% if hosts %}
+            <fieldset>
+                <legend>hosts</legend>
+                {% for host in hosts %}
+                    <form action="/list/hosts/remove/{{ host }}" method="post">
+                        <button>x</button>
+                        {{ host }}
+                    </form>
+                {% endfor %}
+            </fieldset>
+        {% endif %}
+    </body>
+</html>

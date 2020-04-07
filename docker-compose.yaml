@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  visigoth:
+    image: mmeyer2k/visigoth
+    restart: always
+    container_name: visigoth
+    ports:
+      - 127.0.0.1:53:5353/udp
+      - 127.0.0.1:4242:4242/tcp
+    volumes:
+      - ./rules:/shared/rules
+    environment:
+      FALLBACK_RESOLVER: 9.9.9.9
+      MODE: tight
+      PROXY:
