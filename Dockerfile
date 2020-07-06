@@ -4,7 +4,7 @@ ENV TERM xterm-256color
 
 # Install pre-requisites
 RUN apk add --update --no-cache dnscrypt-proxy ruby dnsmasq redis ncurses git \
-    && rm -rfv /var/cache/apk/*
+ && rm -rfv /var/cache/apk/*
 
 # Modify the dnsmasq config file
 RUN {  echo "user=root" \
@@ -29,7 +29,7 @@ RUN cat $toml | \
     sed -e 's|listen_addresses = .*|listen_addresses = ["127.0.0.1:53"]|' | \
     sed -e 's|# server_names = .*|server_names = ["cloudflare", "cloudflare-ip6"]|' \
     > $toml.new \
-    && mv -fv $toml.new $toml
+ && mv -fv $toml.new $toml
 
 RUN mkdir -p /shared/hosts
 
