@@ -19,7 +19,14 @@
         <script>
             $(document).ready(function () {
                 $('input[name="domain"]').change(function () {
-                    $(this).val($(this).val().toLowerCase())
+                    var val = $(this).val()
+                    
+                    val = val.toLowerCase()
+                    val = val.replace('http:', '')
+                    val = val.replace('/', '')
+                    
+                    $(this).val(val)
+                    
                     $(this).attr('pattern', '^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,10}$')
                 })
             })
