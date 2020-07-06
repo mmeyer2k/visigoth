@@ -19,10 +19,12 @@
         <script>
             $(document).ready(function () {
                 $('input[name="domain"]').change(function () {
-                    let val = $(this).val().toLowerCase()
-
-                    val = val.replace('http://', '')
-                    val = val.replace('/', '')
+                    let val = $(this)
+                        .val()
+                        .toLowerCase()
+                        .replaceAll('http:', '')
+                        .replaceAll('https:', '')
+                        .replaceAll('/', '')
                     
                     $(this).val(val)
                     
