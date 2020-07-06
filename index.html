@@ -22,9 +22,9 @@
                     let val = $(this)
                         .val()
                         .toLowerCase()
-                        .replaceAll('http:', '')
-                        .replaceAll('https:', '')
-                        .replaceAll('/', '')
+                        .replace('http:', '')
+                        .replace('https:', '')
+                        .replace(/\//gi, '')
                     
                     $(this).val(val)
                     
