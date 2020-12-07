@@ -25,9 +25,9 @@ app.get('/', (request, response) => {
         .get('mode:last')
         .exec((err, results) => {
             return response.render('index', {
-                allow: results[0],
-                block: results[1],
-                hosts: results[2],
+                allow: results[0].sort(),
+                block: results[1].sort(),
+                hosts: results[2].sort(),
                 stamp: timeAgo(new Date(results[3] || (new Date()).toISOString())),
                 mode: results[4],
             })
