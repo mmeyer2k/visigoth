@@ -33,7 +33,9 @@ RUN cat $toml | \
 
 RUN mkdir -p /shared/hosts
 
-RUN cd /shared && yarn add express nunjucks redis jquery node-time-ago
+RUN git clone https://github.com/notracking/hosts-blocklists /shared/hosts-blocklists
+
+RUN cd /shared && yarn add express nunjucks redis jquery node-time-ago morgan
 
 COPY favicon.ico /shared/
 COPY entrypoint.sh /shared/

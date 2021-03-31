@@ -1,0 +1,14 @@
+# Control top level domain access
+# The best option is to allow only your most frequently used TLDs by default the make more fine-grained rule rules.
+
+# Blocked TLDs that will be used in loose mode.
+block:
+  - cn
+  - ru
+
+# TLDs that will be allowed in tight mode
+allow:
+  - com
+  - org
+  - net
+  - io

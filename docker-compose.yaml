@@ -1,6 +1,7 @@
 version: "3.7"
 services:
   visigoth:
+    build: .
     image: mmeyer2k/visigoth
     restart: always
     container_name: visigoth

@@ -1,0 +1,5 @@
+# It is often helpful to allow URL shorteners that you use frequently
+whitelist:
+  - t.co
+  - amzn.co
+  - grc.sc

@@ -8,8 +8,8 @@ redis-server --appendonly yes --maxmemory 5M &
 # This also helps resolve any proxy server domain names while booting up dnscrypt
 dnsmasq --conf-file=/etc/dnsmasq.conf
 
-# Start nodejs web interface
-node /shared/server.js &
+# Start nodejs web interface and redirect stdout to stderr
+node /shared/server.js & 1>&2
 
 # Modify dnscrypt settings from runtime ENV variables
 TOML=/etc/dnscrypt-proxy/dnscrypt-proxy.toml
@@ -45,22 +45,20 @@ while ! redis-cli ping; do
   sleep 0.1
 done
 
+# Begin the controlling loop
 while :
 do
+  # If the tracking lists have not been downloaded or are expired...
   if redis-cli exists keep:notracking | grep -q 0; then
 
-    # Get the latest copy of the block lists
-    if [ -f /shared/hosts-blocklists/hostnames.txt ]; then
-      git -C /shared/hosts-blocklists pull
-    else
-      git clone --depth=1 https://github.com/notracking/hosts-blocklists /shared/hosts-blocklists
-    fi
+    # Pull in latest changes to global block lists
+    git -C /shared/hosts-blocklists pull
 
     # Copy block list files to location for usage
     cp -fv /shared/hosts-blocklists/domains.txt /etc/dnsmasq.d/notracking.conf
     cp -fv /shared/hosts-blocklists/hostnames.txt /shared/hosts/notracking.txt
 
-    # Make sure that dnsmasq gets restarted
+    # Make sure that dnsmasq gets restarted at the end of main loop
     redis-cli del keep:rules
 
     # Set the timeout flag

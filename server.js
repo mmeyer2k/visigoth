@@ -3,8 +3,10 @@ const nunjucks = require('nunjucks')
 const app = express()
 const port = 4242
 const redis = require('redis').createClient()
+const morgan = require('morgan')
 
 app.use(express.urlencoded())
+app.use(morgan('dev'))
 
 nunjucks.configure(__dirname, {
     autoescape: true,
@@ -34,7 +36,7 @@ app.get('/', (request, response) => {
         })
 })
 
-app.get('/dynamic.yaml', (request, response) => {
+app.get('/rules/dynamic', (request, response) => {
     response.sendFile("/shared/rules/00_dynamic.yaml")
 })
 
@@ -60,6 +62,10 @@ app.post('/flush', (request, response) => {
     redis.del(['keep:rules', 'rules:allow', 'rules:block'], (err, result) => {
         return response.redirect('/')
     })
+})
+
+app.get('/rules/static', (request, response) => {
+    response.sendFile("/shared/hosts/static.json")
 })
 
 app.post('/list/hosts/add', (request, response) => {
