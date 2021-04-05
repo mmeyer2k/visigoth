@@ -7,14 +7,25 @@
         <style>
             body {
                 font-family: monospace;
-                min-width: 600px;
+                min-width: 700px;
+                max-width: 700px;
                 padding: 10px;
             }
+
+            nav > a {
+                float: right
+            }
+
             div.modechange form {
                 float: left;
             }
+
             a {
                 text-decoration: none;
+            }
+
+            #logo {
+                font-weight: bold;
             }
         </style>
         <script>
@@ -26,32 +37,32 @@
                         .replace('http:', '')
                         .replace('https:', '')
                         .replace(/\//gi, '')
-                    
+
                     $(this).val(val)
-                    
+
                     $(this).attr('pattern', '^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,10}$')
                 })
             })
         </script>
     </head>
     <body>
-        <a href="/">
-            <button>refresh</button>
-        </a>
-        <a href="/rules/dynamic">
-            <button>dynamic rules</button>
-        </a>
-        <a href="/rules/static">
-            <button>static rules</button>
-        </a>
-        <a href="https://github.com/mmeyer2k/visigoth" target="_blank">
-            <button>github</button>
-        </a>
+        <nav>
+            <span id="logo">VISIGOTH 🏰</span>
+            <a href="https://github.com/mmeyer2k/visigoth" target="_blank" style="float: right;">
+                <button>github</button>
+            </a>
+            <a href="/" style="float: right;">
+                <button>refresh</button>
+            </a>
+        </nav>
         <hr>
         <div class="modechange">
             <form method="post" action="/mode/off">
                 reload rule set mode:
                 <button>off</button>
+            </form>
+            <form method="post" action="/mode/off-60">
+                <button>off (1 hour)</button>
             </form>
             <form method="post" action="/mode/loose">
                 <button>loose</button>
@@ -73,6 +84,9 @@
         </div>
         <div>
             last rule build mode: {{ mode }}
+            {% if next %}
+                <span style="color: dimgray">(restoring back to <strong>{{ next }}</strong> in {{ time }} minutes)</span>
+            {% endif %}
         </div>
         <form action="/list/allow/add" method="post">
             add domain to <span style="text-decoration: underline;">allow</span> list:

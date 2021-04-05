@@ -35,12 +35,14 @@ RUN mkdir -p /shared/hosts
 
 RUN git clone https://github.com/notracking/hosts-blocklists /shared/hosts-blocklists
 
-RUN cd /shared && yarn add express nunjucks redis jquery node-time-ago morgan
+RUN cd /shared && yarn add express nunjucks redis jquery morgan moment
+
+RUN gem install redis
 
 COPY favicon.ico /shared/
 COPY entrypoint.sh /shared/
 COPY rules.rb /shared/
-COPY index.html /shared/
+COPY index.njk /shared/
 COPY server.js /shared/
 
 COPY visigoth.sh /usr/local/bin/visigoth

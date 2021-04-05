@@ -64,36 +64,21 @@ do
     # Set the timeout flag
     redis-cli setex keep:notracking 86400 1
 
+    # Store last commit hash for linking to github
+    redis-cli set notracking:hash `git -C /shared/hosts-blocklists rev-parse --verify HEAD`
+
   fi
 
+  # If the one hour off timer is up...
+  if redis-cli exists mode:next | grep -q 1; then
+    if redis-cli exists mode:time | grep -q 0; then
+      redis-cli rename mode:next mode:last
+      redis-cli del keep:rules
+    fi
+  fi
+
+  # If the ruleset has been triggered to be rebuilt...
   if redis-cli exists keep:rules | grep -q 0; then
-
-    # Delete current contents
-    rm -fv /shared/rules/00_dynamic.yaml
-
-    # Build the dynamic allow list
-    if redis-cli exists rules:allow | grep -q 1; then
-      { \
-        echo "allow:" \
-        && redis-cli smembers rules:allow | xargs -I{} echo '  -' {} \
-      ;} >> /shared/rules/00_dynamic.yaml
-    fi
-
-    # Build the dynamic block list
-    if redis-cli exists rules:block | grep -q 1; then
-      { \
-        echo "block:" \
-        && redis-cli smembers rules:block | xargs -I{} echo '  -' {} \
-      ;} >> /shared/rules/00_dynamic.yaml
-    fi
-
-    # Build the dynamic hosts list
-    if redis-cli exists rules:hosts | grep -q 1; then
-      { \
-        echo "hosts:" \
-        && redis-cli smembers rules:hosts | xargs -I{} echo '  -' {} \
-      ;} >> /shared/rules/00_dynamic.yaml
-    fi
 
     # Rebuild the rule set yaml files
     2>&1 ruby /shared/rules.rb `redis-cli get mode:last`
@@ -109,5 +94,5 @@ do
 
   fi
 
-  sleep 1
+  sleep 2
 done
