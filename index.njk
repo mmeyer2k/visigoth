@@ -59,19 +59,19 @@
         <div class="modechange">
             <form method="post" action="/mode/off">
                 reload rule set mode:
-                <button>off</button>
+                <button {% if mode == 'off' %}disabled{% endif %}>off</button>
             </form>
             <form method="post" action="/mode/off-60">
-                <button>off (1 hour)</button>
+                <button {% if mode == 'off' %}disabled{% endif %}>off (1 hour)</button>
             </form>
             <form method="post" action="/mode/loose">
-                <button>loose</button>
+                <button {% if mode == 'loose' %}disabled{% endif %}>loose</button>
             </form>
             <form method="post" action="/mode/tight">
-                <button>tight</button>
+                <button {% if mode == 'tight' %}disabled{% endif %}>tight</button>
             </form>
             <form method="post" action="/mode/paranoid">
-                <button>paranoid</button>
+                <button {% if mode == 'paranoid' %}disabled{% endif %}>paranoid</button>
             </form>
         </div>
         <div style="clear: left">
